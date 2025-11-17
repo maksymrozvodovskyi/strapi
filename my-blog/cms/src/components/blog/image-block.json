@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_blog_image_blocks",
+  "info": {
+    "displayName": "image-block"
+  },
+  "options": {},
+  "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "caption": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
