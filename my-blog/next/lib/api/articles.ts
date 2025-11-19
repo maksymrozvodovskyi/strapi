@@ -1,12 +1,19 @@
-import api from "@/lib/axios";
-import type { Article } from "@/types/article";
+const API_URL = process.env.API_URL;
 
-export async function getArticles(): Promise<Article[]> {
-  const res = await api.get("/articles");
-  return res.data.data;
-}
+export async function getArticles() {
+  const res = await fetch(`${API_URL}/articles`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-export async function getArticle(id: string): Promise<Article> {
-  const res = await api.get(`/articles/${id}`);
-  return res.data.data;
+  if (!res.ok) {
+    console.error("ARTICLES ERROR:", await res.text());
+    return [];
+  }
+
+  const json = await res.json();
+
+  return json.data;
 }

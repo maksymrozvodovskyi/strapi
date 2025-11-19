@@ -1,16 +1,21 @@
 import { getArticles } from "@/lib/api/articles";
-import ArticleList from "@/components/articles/ArticleList";
+import ArticleCard from "@/components/articles/ArticleCard";
+import type { Article } from "@/types/article";
 
 export default async function ArticlesPage() {
-  const articles = await getArticles();
+  const articles: Article[] = await getArticles();
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Articles</h1>
+    <div className="px-4 py-10">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <h1 className="text-3xl font-bold tracking-tight">Articles</h1>
 
-      {!articles.length && <p className="text-gray-600">No articles found.</p>}
-
-      <ArticleList articles={articles} />
+        <div className="space-y-4">
+          {articles.map((article) => (
+            <ArticleCard key={article.id} article={article} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
