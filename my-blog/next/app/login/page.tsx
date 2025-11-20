@@ -1,3 +1,5 @@
+"use client";
+
 import { useTransition } from "react";
 import { loginAction } from "../(auth)/actions";
 import { useForm } from "react-hook-form";
