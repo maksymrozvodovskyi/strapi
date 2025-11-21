@@ -13,33 +13,50 @@ export async function createArticleAction(formData: FormData) {
   };
 
   const parsed = createArticleSchema.safeParse(raw);
-  if (!parsed.success) {
-    console.error("VALIDATION ERROR:", parsed.error.flatten());
-    throw new Error("Validation failed");
-  }
+  if (!parsed.success) throw new Error("Validation failed");
 
   const jwt = await getAuthToken();
   if (!jwt) throw new Error("Unauthorized — no JWT");
 
   const slug = slugify(parsed.data.title);
 
-  const res = await api.post(
-    "/articles",
+  const contentBlocks = [
     {
-      data: {
-        title: parsed.data.title,
-        content: parsed.data.content,
-        slug,
-      },
+      type: "paragraph",
+      children: [
+        {
+          type: "text",
+          text: parsed.data.content,
+        },
+      ],
     },
-    {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
+  ];
+
+  try {
+    const res = await api.post(
+      "/articles",
+      {
+        data: {
+          title: parsed.data.title,
+          slug,
+          content: contentBlocks,
+        },
       },
-    }
-  );
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
 
-  console.log("ARTICLE CREATED:", res.data);
-
-  redirect("/articles");
+    console.log("ARTICLE CREATED:", res.data);
+    redirect("/articles");
+  } catch (error: any) {
+    console.log("STRAPI RAW ERROR:", error?.response?.data);
+    console.log(
+      "STRAPI RAW ERROR FULL:",
+      JSON.stringify(error?.response?.data, null, 2)
+    );
+    throw error;
+  }
 }
