@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Article } from "@/types/article";
 
 export default function ArticleCard({ article }: { article: Article }) {
@@ -9,7 +10,10 @@ export default function ArticleCard({ article }: { article: Article }) {
   });
 
   return (
-    <div className="p-5 border rounded-xl bg-white shadow-sm hover:shadow-md hover:bg-gray-50 transition">
+    <Link
+      href={`/articles/${article.documentId}`}
+      className="block p-5 border rounded-xl bg-white shadow-sm hover:shadow-md hover:bg-gray-50 transition"
+    >
       <div className="flex items-center justify-between mb-2">
         <h2 className="font-semibold text-lg tracking-tight">
           {article.title}
@@ -30,6 +34,6 @@ export default function ArticleCard({ article }: { article: Article }) {
         <span>{date}</span>
         <span>{article.views} views</span>
       </div>
-    </div>
+    </Link>
   );
 }
